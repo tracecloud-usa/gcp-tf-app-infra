@@ -36,6 +36,7 @@ variable "instances" {
     service_account = "nginx-web-admin"
     network         = "vpc-edge-untrusted"
     network_project = "vpc-edge-prod-01"
+    subnet          = "edge-untrusted-subnet-01"
   }]
 }
 
