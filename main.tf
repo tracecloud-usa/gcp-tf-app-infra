@@ -13,7 +13,8 @@ resource "google_compute_instance" "this" {
   }
 
   network_interface {
-    network = data.google_compute_network.this[each.value.network].self_link
+    network    = data.google_compute_network.this[each.value.network].self_link
+    subnetwork = data.google_compute_subnetwork.this[each.value.subnet].self_link
   }
 
   service_account {
@@ -29,6 +30,7 @@ variable "instances" {
     service_account = string
     network         = string
     network_project = string
+    subnet          = string
   }))
   default = [{
     name            = "test-web-server"
@@ -38,6 +40,14 @@ variable "instances" {
     network_project = "vpc-edge-prod-01"
     subnet          = "edge-untrusted-subnet-01"
   }]
+}
+
+data "google_compute_subnetwork" "this" {
+  for_each = { for k, v in var.instances : v.subnet => v }
+
+  name    = each.value.subnet
+  project = each.value.network_project
+  region  = data.google_client_config.this.region
 }
 
 data "google_compute_network" "this" {
@@ -55,3 +65,5 @@ data "google_service_account" "this" {
 }
 
 data "google_compute_zones" "this" {}
+
+data "google_client_config" "this" {}
