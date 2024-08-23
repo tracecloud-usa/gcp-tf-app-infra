@@ -11,15 +11,14 @@ terraform {
       version = ">=5.10.0"
     }
   }
-  #  cloud {
-  #    organization = "tracecloud"
-  #    hostname     = "app.terraform.io"
-  #
-  #    workspaces {
-  #      project = "main"
-  #      name    = "gcp-tf-prod-infra"
-  #    }
-  #  }
+  cloud {
+
+    organization = "tracecloud"
+
+    workspaces {
+      name = "gcp-tf-prod-infra"
+    }
+  }
 }
 
 provider "google" {
