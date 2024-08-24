@@ -50,7 +50,7 @@ header nav ul li a:hover {
     color: #121212;
 }
 
-/* Hero Section Styling */
+/* Hero Section Styling with Slow Zoom Effect */
 .hero {
     background: url('hero-background.jpg') no-repeat center center/cover;
     height: 80vh;
@@ -60,6 +60,8 @@ header nav ul li a:hover {
     color: #ffffff;
     text-align: center;
     position: relative;
+    overflow: hidden;
+    animation: zoomBackground 60s linear infinite; /* Slow and continuous zoom */
 }
 
 .hero::before {
@@ -96,6 +98,18 @@ header nav ul li a:hover {
     border-radius: 10px;
     display: inline-block;
     line-height: 1.8;
+}
+
+/* Keyframes for Smooth Zoom */
+@keyframes zoomBackground {
+    0% {
+        transform: scale(1);
+        transform-origin: center center;
+    }
+    100% {
+        transform: scale(1.1);
+        transform-origin: center center;
+    }
 }
 
 /* Call-to-Action Button Styling */

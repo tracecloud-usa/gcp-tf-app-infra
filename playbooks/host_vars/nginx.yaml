@@ -6,7 +6,6 @@ domain: ai.tracecloud.us
 website_files:
   - index.html
   - hero-background.jpg
-  - logo.png
   - styles.css
   - contact.html
   - pricing.html

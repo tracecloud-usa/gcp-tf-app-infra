@@ -5,6 +5,25 @@ variable "provider_config" {
   })
 }
 
+variable "websites" {
+  type = list(object({
+    domain = string
+    files  = list(string)
+  }))
+  default = [{
+    domain = "ai.tracecloud.us"
+    files = [
+      "index.html",
+      "styles.css",
+      "hero-background.jpg",
+      "contact.html",
+      "pricing.html",
+      "features.html",
+    ]
+  }]
+}
+
+
 # stored in TFE
 variable "ssh_pub_key" {}
 

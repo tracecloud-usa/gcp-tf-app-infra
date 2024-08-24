@@ -20,25 +20,6 @@ module "vms" {
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
 
-variable "websites" {
-  type = list(object({
-    domain = string
-    files  = list(string)
-  }))
-  default = [{
-    domain = "ai.tracecloud.us"
-    files = [
-      "index.html",
-      "styles.css",
-      "logo.png",
-      "hero-background.jpg",
-      "contact.html",
-      "pricing.html",
-      "features.html",
-    ]
-  }]
-}
-
 resource "local_file" "nginx_config" {
   for_each = { for k, v in var.websites : k => v }
 
