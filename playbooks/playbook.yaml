@@ -1,6 +1,12 @@
-- name: Deploy site on Nginx
+---
+- name: Deploy the website
   hosts: all
-  become: true
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - common
+    - webserver
 
   vars:
     site: '{{ domain }}'    
