@@ -3,88 +3,51 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1e1e1e;
-    color: #c7c7c7;
-    line-height: 1.6;
-    background: linear-gradient(135deg, #1f1f1f, #2c3e50);
-    animation: gradientBackground 15s ease infinite;
-}
-
-@keyframes scrollBackground {
-    0% { background-position: center top; }
-    100% { background-position: center bottom; }
-}
-
-/* Hero Section Styling with Continuous Background Scroll */
-.hero {
-    background: url('hero-background.jpg') repeat-y center top/cover;
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    text-align: center;
     background-color: #121212;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-    position: relative;
-    overflow: hidden;
-    animation: scrollBackground 60s linear infinite; /* Slow and continuous */
-    z-index: 2; /* Ensure hero section is above any background overlays */
+    color: #e0e0e0;
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Dark overlay for better contrast */
-    z-index: 1;
-    pointer-events: none; /* Ensure the overlay doesn't block interactions */
+/* Header Styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-header .logo {
-    font-size: 24px;
+header .logo h1 {
+    font-size: 28px;
     font-weight: bold;
     color: #00d4ff;
-    display: flex;
-    align-items: center;
-    z-index: 2; /* Ensure the logo is above the overlay */
+    margin: 0;
 }
 
-header .logo img {
-    height: 50px;
-    margin-right: 20px;
-}
-
-/* Navigation Styling */
-nav ul {
+header nav ul {
     list-style: none;
+    display: flex;
     margin: 0;
     padding: 0;
-    display: flex;
-    z-index: 2;
 }
 
-nav ul li {
+header nav ul li {
     margin-left: 20px;
 }
 
-nav ul li a {
-    color: #ffffff;
+header nav ul li a {
+    color: #e0e0e0;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 5px;
-    background-color: rgba(45, 45, 45, 0.8); /* Semi-transparent background for buttons */
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-    z-index: 2; /* Ensure buttons are clickable */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-nav ul li a:hover {
+header nav ul li a:hover {
     background-color: #00d4ff;
     color: #121212;
-    transform: scale(1.1);
 }
 
 /* Hero Section Styling */
@@ -96,17 +59,23 @@ nav ul li a:hover {
     align-items: center;
     color: #ffffff;
     text-align: center;
-    background-color: #121212;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
     position: relative;
-    overflow: hidden;
-    animation: moveBackground 10s linear infinite;
 }
 
-@keyframes moveBackground {
-    0% { background-position: center center; }
-    50% { background-position: center top; }
-    100% { background-position: center center; }
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
 }
 
 .hero h2 {
@@ -114,89 +83,47 @@ nav ul li a:hover {
     margin: 0;
     color: #ffffff;
     background: rgba(0, 0, 0, 0.7);
-    padding: 10px 20px;
+    padding: 15px 25px;
     border-radius: 10px;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
     display: inline-block;
-    animation: fadeIn 2s ease-in-out;
-    z-index: 3; /* Ensure text is above other elements */
 }
 
 .hero p {
     font-size: 20px;
     margin: 20px 0;
-    color: #ffffff;
     background: rgba(0, 0, 0, 0.7);
     padding: 10px 20px;
     border-radius: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     display: inline-block;
     line-height: 1.8;
-    animation: fadeIn 3s ease-in-out 1s;
-    z-index: 3; /* Ensure text is above other elements */
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Call-to-Action Button Styling */
 .cta-button {
     background-color: #00d4ff;
-    color: #1e1e1e;
+    color: #121212;
     padding: 15px 30px;
     border-radius: 25px;
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    z-index: 3;
-    animation: fadeInUp 2s ease-in-out 1.5s;
-}
-
-.cta-button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
-}
-
-.cta-button:hover::after {
-    width: 300px;
-    height: 300px;
-    opacity: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .cta-button:hover {
     background-color: #00a8cc;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    color: #000;
-}
-
-@keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
 }
 
 /* Footer Styling */
 footer {
-    background-color: #2d2d2d;
-    color: #c7c7c7;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
     text-align: center;
     padding: 20px;
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 2s ease-in-out;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
 }
 
 footer p {
@@ -204,21 +131,11 @@ footer p {
     font-size: 14px;
 }
 
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Mobile Styles */
+/* Responsive Design */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
         text-align: center;
-        padding: 20px 20px;
-    }
-
-    .logo img {
-        height: 40px;
     }
 
     nav ul {
@@ -231,21 +148,12 @@ html {
         margin-bottom: 10px;
     }
 
-    nav ul li a {
-        padding: 15px 20px;
-        font-size: 16px;
-    }
-
     .hero h2 {
         font-size: 32px;
     }
 
     .hero p {
         font-size: 16px;
-    }
-
-    .hero-content {
-        padding: 10px;
     }
 
     .cta-button {
@@ -259,7 +167,7 @@ html {
 }
 
 @media (max-width: 480px) {
-    .logo {
+    .logo h1 {
         font-size: 20px;
     }
 
