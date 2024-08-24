@@ -20,7 +20,7 @@
     ansible_user: trace
     site: '{{ domain }}'
     web_root: "/var/www/{{ site }}"
-    server_template: "{{ playbook_dir }}/sites/nginx.conf.j2"
+    server_template: "{{ playbook_dir }}/templates/nginx.conf.j2"
     remote_nginx_sites_available: /etc/nginx/sites-available/'{{ site }}'.conf
     remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ site }}'.conf
     nginx_dirs:
