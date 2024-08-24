@@ -1,0 +1,23 @@
+---
+- name: Check if PasswordAuthentication is set to no in the custom SSH config
+  ansible.builtin.shell: grep -E '^\s*PasswordAuthentication\s+no' /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+  register: sshd_config_check
+  ignore_errors: yes
+
+- name: Ensure PasswordAuthentication is disabled
+  ansible.builtin.debug:
+    msg: "Password-based SSH is disabled on {{ inventory_hostname }}."
+  when: sshd_config_check.rc == 0
+
+- name: Create a file to disable password-based SSH if not found
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/99-no-password-ssh.conf
+    content: |
+      # Disables password-based SSH authentication
+      PasswordAuthentication no
+    owner: root
+    group: root
+    mode: '0644'
+  when: sshd_config_check.rc != 0
+  notify:
+    - Restart SSH

@@ -57,7 +57,7 @@ header {
 header .logo h1 {
     font-size: 3em; /* Increase this value to make the logo larger */
     font-weight: bold;
-    color: #00d4ff;
+    color: #aad6df;
     margin: 0;
     position: relative;
     animation: logoFadeIn 2s ease-in-out;
