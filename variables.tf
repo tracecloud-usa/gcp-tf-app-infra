@@ -15,7 +15,7 @@ variable "websites" {
     files = [
       "index.html",
       "styles.css",
-      "hero-background.jpg",
+      "banner-background.jpg",
       "contact.html",
       "pricing.html",
       "features.html",

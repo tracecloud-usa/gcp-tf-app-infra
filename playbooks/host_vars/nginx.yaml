@@ -5,7 +5,7 @@ ssh_pubkey: ~/.ssh/id_rsa.pub
 domain: ai.tracecloud.us
 website_files:
   - index.html
-  - hero-background.jpg
+  - banner-background.jpg
   - styles.css
   - contact.html
   - pricing.html

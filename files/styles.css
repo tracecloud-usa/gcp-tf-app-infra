@@ -3,19 +3,21 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212;
+    background-color: #1e1e1e;
     color: #e0e0e0;
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Header Styling */
+/* Header Styling with Banner Background */
 header {
+    background: url('banner-background.jpg') no-repeat center center/cover;
+    height: 20vh; /* Adjust height for the banner */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background-color: #1f1f1f;
+    background-size: cover;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -50,29 +52,29 @@ header nav ul li a:hover {
     color: #121212;
 }
 
-/* Hero Section Styling with Slow Zoom Effect */
+/* Hero Section Styling with Animated Gradient */
 .hero {
-    background: url('hero-background.jpg') no-repeat center center/cover;
-    height: 80vh;
+    background: linear-gradient(135deg, #2c2c2c, #3a3a3a);
+    height: 60vh; /* Adjust height for the hero section */
     display: flex;
     justify-content: center;
     align-items: center;
     color: #ffffff;
     text-align: center;
     position: relative;
-    overflow: hidden;
-    animation: zoomBackground 60s linear infinite; /* Slow and continuous zoom */
+    animation: gradientAnimation 15s ease infinite;
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
-    z-index: 1;
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .hero-content {
@@ -98,18 +100,6 @@ header nav ul li a:hover {
     border-radius: 10px;
     display: inline-block;
     line-height: 1.8;
-}
-
-/* Keyframes for Smooth Zoom */
-@keyframes zoomBackground {
-    0% {
-        transform: scale(1);
-        transform-origin: center center;
-    }
-    100% {
-        transform: scale(1.1);
-        transform-origin: center center;
-    }
 }
 
 /* Call-to-Action Button Styling */
