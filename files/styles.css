@@ -12,9 +12,34 @@ body {
     min-height: 100vh; /* Ensure the body takes full height */
 }
 
-/* Main Content Wrapper to push footer to the bottom */
-main {
-    flex: 1;
+/* Ensure the hero section takes up available space */
+.hero {
+    background: linear-gradient(135deg, #1e1e1e 20%, #2a2a2a 50%, #1e1e1e 80%);
+    flex: 1; /* Allow the hero section to grow and fill the remaining space */
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    animation: gradientAnimation 45s ease infinite; /* Slower animation for smoother transition */
+}
+
+/* Footer Styling */
+footer {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    margin-top: auto; /* Push the footer to the bottom */
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
 }
 
 /* Header Styling with Banner Background */
@@ -63,20 +88,6 @@ header nav ul li a:hover {
     background-color: #00d4ff;
     color: #121212;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Hero Section Styling with Even Smoother Gradient */
-.hero {
-    background: linear-gradient(135deg, #1e1e1e 20%, #2a2a2a 50%, #1e1e1e 80%);
-    height: 50vh;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    text-align: center;
-    position: relative;
-    animation: gradientAnimation 45s ease infinite; /* Slower animation for smoother transition */
 }
 
 @keyframes gradientAnimation {
@@ -136,22 +147,6 @@ header nav ul li a:hover {
     background-color: #0099cc;
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
     transform: scale(1.05);
-}
-
-/* Footer Styling */
-footer {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
-    text-align: center;
-    padding: 20px;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    margin-top: auto; /* Push the footer to the bottom */
-}
-
-footer p {
-    margin: 0;
-    font-size: 14px;
 }
 
 /* Responsive Design */
