@@ -9,6 +9,9 @@
       - hero-background.jpg
       - logo.png
       - styles.css
+      - contact.html
+      - pricing.html
+      - features.html
     
     local_nginx_config: "{{ playbook_dir }}/sites/nginx.conf"
     remote_nginx_sites_available: /etc/nginx/sites-available/'{{ domain }}'.conf

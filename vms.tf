@@ -32,6 +32,9 @@ variable "websites" {
       "styles.css",
       "logo.png",
       "hero-background.jpg",
+      "contact.html",
+      "pricing.html",
+      "features.html",
     ]
   }]
 }

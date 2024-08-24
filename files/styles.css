@@ -16,20 +16,37 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Top Banner Styling */
+/* Top Banner Styling with Background Image */
 header {
-    background-color: #121212; /* Darker background for better contrast */
-    padding: 20px 40px; /* Add padding for more spacing */
+    background: url('logo.png') no-repeat center center/cover; /* Add logo.png as background */
+    background-size: cover; /* Ensure the background image covers the entire banner */
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Stronger shadow for more depth */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay for better contrast */
+    z-index: 1;
 }
 
 header .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #00d4ff; /* Make the logo text match the theme */
+    color: #00d4ff;
+    display: flex;
+    align-items: center;
+    z-index: 2; /* Ensure the logo is above the overlay */
 }
 
 header .logo img {
@@ -37,11 +54,13 @@ header .logo img {
     margin-right: 20px;
 }
 
+/* Navigation Styling */
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
+    z-index: 2;
 }
 
 nav ul li {
@@ -49,53 +68,18 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #ffffff; /* White text for better contrast */
+    color: #ffffff;
     text-decoration: none;
     padding: 10px 20px;
     border-radius: 5px;
-    background-color: #2d2d2d; /* Dark background for buttons */
+    background-color: rgba(45, 45, 45, 0.8); /* Semi-transparent background for buttons */
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 nav ul li a:hover {
     background-color: #00d4ff;
     color: #121212;
-    transform: scale(1.1); /* Slight scale-up on hover for interactivity */
-}
-
-/* Dropdown Menu Enhancements */
-nav ul li {
-    position: relative;
-}
-
-nav ul li ul {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #2d2d2d;
-    padding: 10px;
-    list-style: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-nav ul li ul li {
-    margin: 0;
-}
-
-nav ul li:hover ul {
-    display: block;
-}
-
-nav ul li ul li a {
-    padding: 10px;
-    color: #ffffff; /* White text in dropdowns */
-}
-
-nav ul li ul li a:hover {
-    background-color: #00d4ff;
-    color: #121212;
+    transform: scale(1.1);
 }
 
 /* Hero Section Styling */
@@ -129,6 +113,7 @@ nav ul li ul li a:hover {
     border-radius: 10px;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
     display: inline-block;
+    animation: fadeIn 2s ease-in-out;
 }
 
 .hero p {
@@ -141,6 +126,12 @@ nav ul li ul li a:hover {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     display: inline-block;
     line-height: 1.8;
+    animation: fadeIn 3s ease-in-out 1s;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Call-to-Action Button Styling */
@@ -157,6 +148,7 @@ nav ul li ul li a:hover {
     position: relative;
     overflow: hidden;
     z-index: 1;
+    animation: fadeInUp 2s ease-in-out 1.5s;
 }
 
 .cta-button::after {
@@ -185,6 +177,11 @@ nav ul li ul li a:hover {
     color: #000;
 }
 
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Footer Styling */
 footer {
     background-color: #2d2d2d;
@@ -192,6 +189,7 @@ footer {
     text-align: center;
     padding: 20px;
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-in-out;
 }
 
 footer p {
