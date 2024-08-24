@@ -9,13 +9,13 @@
 
   tasks:
     - name: Create user '{{ username }}'
-      user:
+      ansible.builtin.user:
         name: '{{ username }}'
         state: present
         createhome: yes
 
     - name: Add '{{ username }}' to sudoers group
-      user:
+      ansible.builtin.user:
         name: '{{ username }}'
         groups: sudo
         append: yes
@@ -28,13 +28,13 @@
 
 
     - name: Add SSH public key to '{{ username }}' authorized keys
-      authorized_key:
+      ansible.builtin.authorized_key:
         user: '{{ username }}'
         key: "{{ lookup('file', '{{ ssh_pubkey }}') }}"
         state: present
 
     - name: Set ownership and permissions for '{{ username }}' home directory
-      file:
+      ansible.builtin.file:
         path: /home/'{{ username }}'
         owner: '{{ username }}'
         group: '{{ username }}'

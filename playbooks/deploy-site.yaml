@@ -3,16 +3,7 @@
   become: true
 
   vars:
-    site: '{{ domain }}'
-    website_files:
-      - index.html
-      - hero-background.jpg
-      - logo.png
-      - styles.css
-      - contact.html
-      - pricing.html
-      - features.html
-    
+    site: '{{ domain }}'    
     local_nginx_config: "{{ playbook_dir }}/sites/nginx.conf"
     remote_nginx_sites_available: /etc/nginx/sites-available/'{{ domain }}'.conf
     remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ domain }}'.conf
@@ -59,7 +50,7 @@
         mode: '0644'
 
     - name: Create symbolic link to sites-enabled
-      file:
+      ansible.builtin.file:
         src: "{{ remote_nginx_sites_available }}"
         dest: "{{ remote_nginx_sites_enabled }}"
         state: link
