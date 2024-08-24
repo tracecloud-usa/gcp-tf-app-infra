@@ -10,23 +10,26 @@ body {
     animation: gradientBackground 15s ease infinite;
 }
 
-@keyframes gradientBackground {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+@keyframes scrollBackground {
+    0% { background-position: center top; }
+    100% { background-position: center bottom; }
 }
 
-/* Top Banner Styling with Background Image */
-header {
-    background: url('logo.png') no-repeat center center/cover; /* Add logo.png as background */
-    background-size: cover; /* Ensure the background image covers the entire banner */
-    padding: 20px 40px;
+/* Hero Section Styling with Continuous Background Scroll */
+.hero {
+    background: url('hero-background.jpg') repeat-y center top/cover;
+    height: 80vh;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    text-align: center;
+    background-color: #121212;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
     position: relative;
     overflow: hidden;
+    animation: scrollBackground 60s linear infinite; /* Slow and continuous */
+    z-index: 2; /* Ensure hero section is above any background overlays */
 }
 
 header::before {
@@ -38,6 +41,7 @@ header::before {
     height: 100%;
     background: rgba(0, 0, 0, 0.6); /* Dark overlay for better contrast */
     z-index: 1;
+    pointer-events: none; /* Ensure the overlay doesn't block interactions */
 }
 
 header .logo {
@@ -74,6 +78,7 @@ nav ul li a {
     border-radius: 5px;
     background-color: rgba(45, 45, 45, 0.8); /* Semi-transparent background for buttons */
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    z-index: 2; /* Ensure buttons are clickable */
 }
 
 nav ul li a:hover {
@@ -114,6 +119,7 @@ nav ul li a:hover {
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
     display: inline-block;
     animation: fadeIn 2s ease-in-out;
+    z-index: 3; /* Ensure text is above other elements */
 }
 
 .hero p {
@@ -127,6 +133,7 @@ nav ul li a:hover {
     display: inline-block;
     line-height: 1.8;
     animation: fadeIn 3s ease-in-out 1s;
+    z-index: 3; /* Ensure text is above other elements */
 }
 
 @keyframes fadeIn {
@@ -147,7 +154,7 @@ nav ul li a:hover {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
-    z-index: 1;
+    z-index: 3;
     animation: fadeInUp 2s ease-in-out 1.5s;
 }
 

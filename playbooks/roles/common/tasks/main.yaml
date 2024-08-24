@@ -1,28 +1,35 @@
 ---
-- name: Create user '{{ username }}'
+- name: Check if the user '{{ username }}' exists
+  ansible.builtin.getent:
+    database: passwd
+    key: '{{ username }}'
+  register: new_user
+  changed_when: false
+
+- name: Skip remaining tasks if '{{ username }}' user exists
+  ansible.builtin.debug:
+    msg: "User '{{ username }}' already exists. Skipping other tasks."
+  when: new_user is not none and new_user | length > 0
+
+- name: Create the '{{ username }}' user
   ansible.builtin.user:
     name: '{{ username }}'
     state: present
-    createhome: yes
+  when: new_user is none or new_user | length == 0
 
-- name: Add '{{ username }}' to sudoers group
-  ansible.builtin.user:
-    name: '{{ username }}'
-    groups: sudo
-    append: yes
-
-- name: Allow '{{ username }}' to use sudo without password
-  ansible.builtin.lineinfile:
-    dest: /etc/sudoers
-    line: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
-    validate: 'visudo -cf %s'
-
+- name: Add '{{ username }}' user to sudoers
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/'{{ username }}'
+    content: "'{{ username }}' ALL=(ALL) NOPASSWD:ALL"
+    mode: '0440'
+  when: new_user is none or new_user | length == 0
 
 - name: Add SSH public key to '{{ username }}' authorized keys
   ansible.builtin.authorized_key:
     user: '{{ username }}'
     key: "{{ lookup('file', '{{ ssh_pubkey }}') }}"
     state: present
+  when: new_user is none or new_user | length == 0
 
 - name: Set ownership and permissions for '{{ username }}' home directory
   ansible.builtin.file:
@@ -31,3 +38,4 @@
     group: '{{ username }}'
     mode: '0755'
     state: directory
+  when: new_user is none or new_user | length == 0
