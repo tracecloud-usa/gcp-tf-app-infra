@@ -12,7 +12,6 @@ terraform {
     }
   }
   cloud {
-
     organization = "tracecloud"
 
     workspaces {
@@ -30,4 +29,3 @@ provider "google-beta" {
   project = var.provider_config.project
   region  = var.provider_config.region
 }
-

@@ -1,0 +1,21 @@
+---
+- name: Install Nginx
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars:
+    ansible_user: trace
+
+  tasks:
+    - name: Update and install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure Nginx is started and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes

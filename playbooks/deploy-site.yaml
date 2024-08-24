@@ -1,0 +1,67 @@
+- name: Deploy site on Nginx
+  hosts: all
+  become: true
+
+  vars:
+    site: '{{ domain }}'
+    website_files:
+      - index.html
+      - hero-background.jpg
+      - logo.png
+      - styles.css
+    
+    local_nginx_config: "{{ playbook_dir }}/sites/nginx.conf"
+    remote_nginx_sites_available: /etc/nginx/sites-available/'{{ domain }}'.conf
+    remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ domain }}'.conf
+
+  tasks:
+    - name: Ensure the website directory exists
+      ansible.builtin.file:
+        path: "/var/www/{{ site }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy website files
+      ansible.builtin.copy:
+        src: "../files/{{ item }}"
+        dest: "/var/www/{{ site }}/{{ item }}"
+      loop: "{{ website_files }}"
+
+    - name: Update ownership and permissions for www-data
+      ansible.builtin.file:
+        path: "/var/www/{{ site }}"
+        owner: www-data
+        group: www-data
+        mode: '0755'
+        recurse: yes
+
+    - name: Ensure the sites-available directory exists
+      ansible.builtin.file:
+        path: "{{ remote_nginx_sites_available | dirname }}"
+        state: directory
+        mode: '0755'
+
+    - name: Ensure the sites-enabled directory exists
+      ansible.builtin.file:
+        path: "{{ remote_nginx_sites_enabled | dirname }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy nginx.conf to the server
+      ansible.builtin.copy:
+        src: "{{ local_nginx_config }}"
+        dest: "{{ remote_nginx_sites_available }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Create symbolic link to sites-enabled
+      file:
+        src: "{{ remote_nginx_sites_available }}"
+        dest: "{{ remote_nginx_sites_enabled }}"
+        state: link
+
+    - name: Reload Nginx to apply the new configuration
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

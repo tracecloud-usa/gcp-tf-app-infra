@@ -1,0 +1,20 @@
+vms:
+  - name: web-node-01
+    project: product-app-prod-01
+    zone: us-east4-c
+    region: us-east4
+    service_account: nginx-web-admin
+    nics:
+      - network: vpc-edge-untrusted
+        network_project: vpc-edge-prod-01
+        subnet: edge-untrusted-subnet-01
+        assign_public_ip: true
+    tags:
+      - mgmt
+      - web
+      - health-checks
+    startup_script:
+      template: trace-user.tpl
+      vars:
+        username: trace
+    preemptible: true
