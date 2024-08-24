@@ -18,47 +18,44 @@
 
   vars:
     ansible_user: trace
-    site: '{{ domain }}'    
-    local_nginx_config: "{{ playbook_dir }}/sites/nginx.conf"
-    remote_nginx_sites_available: /etc/nginx/sites-available/'{{ domain }}'.conf
-    remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ domain }}'.conf
+    site: '{{ domain }}'
+    web_root: "/var/www/{{ site }}"
+    server_template: "{{ playbook_dir }}/sites/nginx.conf.j2"
+    remote_nginx_sites_available: /etc/nginx/sites-available/'{{ site }}'.conf
+    remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ site }}'.conf
+    nginx_dirs:
+      - "{{ remote_nginx_sites_available | dirname }}"
+      - "{{ remote_nginx_sites_enabled | dirname }}"
+    pages:  '{{ website_files }}'
 
   tasks:
-    - name: Ensure the website directory exists
+    - name: Ensure necessary directories exist
       ansible.builtin.file:
-        path: "/var/www/{{ site }}"
+        path: "{{ item }}"
         state: directory
         mode: '0755'
+      loop: 
+        - "{{ web_root }}"
+        - "{{ nginx_dirs }}"
 
     - name: Copy website files
       ansible.builtin.copy:
-        src: "../files/{{ item }}"
-        dest: "/var/www/{{ site }}/{{ item }}"
-      loop: "{{ website_files }}"
+        src: "{{ playbook_dir }}/files/{{ item }}"
+        dest: "{{ web_root }}/{{ item }}"
+      loop: "{{ pages }}"
+
 
     - name: Update ownership and permissions for www-data
       ansible.builtin.file:
-        path: "/var/www/{{ site }}"
+        path: "{{ web_root }}"
         owner: www-data
         group: www-data
         mode: '0755'
         recurse: yes
 
-    - name: Ensure the sites-available directory exists
-      ansible.builtin.file:
-        path: "{{ remote_nginx_sites_available | dirname }}"
-        state: directory
-        mode: '0755'
-
-    - name: Ensure the sites-enabled directory exists
-      ansible.builtin.file:
-        path: "{{ remote_nginx_sites_enabled | dirname }}"
-        state: directory
-        mode: '0755'
-
-    - name: Copy nginx.conf to the server
-      ansible.builtin.copy:
-        src: "{{ local_nginx_config }}"
+    - name: Deploy Nginx configuration
+      ansible.builtin.template:
+        src: "{{ server_template }}"
         dest: "{{ remote_nginx_sites_available }}"
         owner: root
         group: root
