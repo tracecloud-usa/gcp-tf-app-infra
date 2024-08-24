@@ -1,14 +1,23 @@
 ---
-- name: Deploy the website
+- name: Initial server setup
   hosts: all
   become: yes
   gather_facts: yes
+
+  vars:
+    ansible_user: ubuntu
 
   roles:
     - common
     - webserver
 
+- name: Deploy the website
+  hosts: all
+  become: yes
+  gather_facts: yes
+
   vars:
+    ansible_user: trace
     site: '{{ domain }}'    
     local_nginx_config: "{{ playbook_dir }}/sites/nginx.conf"
     remote_nginx_sites_available: /etc/nginx/sites-available/'{{ domain }}'.conf

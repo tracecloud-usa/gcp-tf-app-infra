@@ -5,31 +5,31 @@
     key: '{{ username }}'
   register: new_user
   changed_when: false
+  ignore_errors: yes
 
 - name: Skip remaining tasks if '{{ username }}' user exists
   ansible.builtin.debug:
     msg: "User '{{ username }}' already exists. Skipping other tasks."
-  when: new_user is not none and new_user | length > 0
+  when: new_user.passwd is defined
 
 - name: Create the '{{ username }}' user
   ansible.builtin.user:
     name: '{{ username }}'
     state: present
-  when: new_user is none or new_user | length == 0
+  when: new_user.passwd is not defined
 
 - name: Add '{{ username }}' user to sudoers
   ansible.builtin.copy:
-    dest: /etc/sudoers.d/'{{ username }}'
-    content: "'{{ username }}' ALL=(ALL) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/{{ username }}
+    content: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
     mode: '0440'
-  when: new_user is none or new_user | length == 0
+  when: new_user.passwd is not defined
 
 - name: Add SSH public key to '{{ username }}' authorized keys
   ansible.builtin.authorized_key:
     user: '{{ username }}'
     key: "{{ lookup('file', '{{ ssh_pubkey }}') }}"
     state: present
-  when: new_user is none or new_user | length == 0
 
 - name: Set ownership and permissions for '{{ username }}' home directory
   ansible.builtin.file:
@@ -38,7 +38,7 @@
     group: '{{ username }}'
     mode: '0755'
     state: directory
-  when: new_user is none or new_user | length == 0
+  when: new_user.passwd is not defined
 
 - name: Check if PasswordAuthentication is set to no in the custom SSH config
   ansible.builtin.shell: grep -E '^\s*PasswordAuthentication\s+no' /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
