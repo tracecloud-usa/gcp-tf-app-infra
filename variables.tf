@@ -3,6 +3,10 @@ variable "provider_config" {
     project = string
     region  = string
   })
+  default = {
+    project = "vpc-edge-prod-01"
+    region  = "us-east4"
+  }
 }
 
 # stored in TFE

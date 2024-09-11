@@ -16,17 +16,14 @@
   become: yes
   gather_facts: yes
 
+
   vars:
     ansible_user: trace
     site: '{{ domain }}'
     web_root: "/var/www/{{ site }}"
-    server_template: "{{ playbook_dir }}/templates/nginx.conf.j2"
     remote_nginx_sites_available: '/etc/nginx/sites-available/{{ site }}.conf'
     remote_nginx_sites_enabled: '/etc/nginx/sites-enabled/{{ site }}.conf'
-    nginx_dirs:
-      - "{{ remote_nginx_sites_available | dirname }}"
-      - "{{ remote_nginx_sites_enabled | dirname }}"
-    pages:  '{{ website_files }}'
+    pages: '{{ website_files }}'
 
   tasks:
     - name: Ensure necessary directories exist
@@ -34,16 +31,16 @@
         path: "{{ item }}"
         state: directory
         mode: '0755'
-      loop: 
+      loop:
         - "{{ web_root }}"
-        - "{{ nginx_dirs }}"
+        - /etc/nginx/sites-available
+        - /etc/nginx/sites-enabled
 
     - name: Copy website files
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/files/{{ item }}"
         dest: "{{ web_root }}/{{ item }}"
       loop: "{{ pages }}"
-
 
     - name: Update ownership and permissions for www-data
       ansible.builtin.file:
@@ -52,14 +49,6 @@
         group: www-data
         mode: '0755'
         recurse: yes
-
-    # - name: Deploy Nginx configuration
-    #   ansible.builtin.template:
-    #     src: "{{ server_template }}"
-    #     dest: "{{ remote_nginx_sites_available }}"
-    #     owner: root
-    #     group: root
-    #     mode: '0644'
 
     - name: Deploy pre-built Nginx configuration
       ansible.builtin.copy:

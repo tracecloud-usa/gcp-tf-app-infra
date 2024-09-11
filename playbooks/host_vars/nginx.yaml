@@ -1,6 +1,6 @@
 ---
 username: trace
-ansible_host: 34.145.209.113
+ansible_host: 34.150.172.59
 ssh_pubkey: ~/.ssh/id_rsa.pub
 domain: test.tracecloud.us
 website_files:
