@@ -19,13 +19,3 @@ module "vms" {
   preemptible        = each.value.preemptible
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
-
-resource "local_file" "nginx_config" {
-  for_each = { for k, v in var.websites : k => v }
-
-  filename = "${path.module}/playbooks/sites/${each.value.domain}.conf"
-  content = templatefile("${path.module}/templates/nginx.conf.tpl", {
-    domain = each.value.domain
-  })
-}
-

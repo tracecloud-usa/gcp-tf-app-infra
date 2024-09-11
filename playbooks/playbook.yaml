@@ -21,8 +21,8 @@
     site: '{{ domain }}'
     web_root: "/var/www/{{ site }}"
     server_template: "{{ playbook_dir }}/templates/nginx.conf.j2"
-    remote_nginx_sites_available: /etc/nginx/sites-available/'{{ site }}'.conf
-    remote_nginx_sites_enabled: /etc/nginx/sites-enabled/'{{ site }}'.conf
+    remote_nginx_sites_available: '/etc/nginx/sites-available/{{ site }}.conf'
+    remote_nginx_sites_enabled: '/etc/nginx/sites-enabled/{{ site }}.conf'
     nginx_dirs:
       - "{{ remote_nginx_sites_available | dirname }}"
       - "{{ remote_nginx_sites_enabled | dirname }}"
@@ -53,9 +53,17 @@
         mode: '0755'
         recurse: yes
 
-    - name: Deploy Nginx configuration
-      ansible.builtin.template:
-        src: "{{ server_template }}"
+    # - name: Deploy Nginx configuration
+    #   ansible.builtin.template:
+    #     src: "{{ server_template }}"
+    #     dest: "{{ remote_nginx_sites_available }}"
+    #     owner: root
+    #     group: root
+    #     mode: '0644'
+
+    - name: Deploy pre-built Nginx configuration
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/sites/{{ site }}.conf"
         dest: "{{ remote_nginx_sites_available }}"
         owner: root
         group: root
