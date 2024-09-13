@@ -19,3 +19,10 @@ module "vms" {
   preemptible        = each.value.preemptible
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
+
+
+data "google_storage_bucket" "this" {
+  name    = "ai-test-docs-bucket"
+  project = "product-app-prod-01"
+}
+
