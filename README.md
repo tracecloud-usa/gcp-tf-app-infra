@@ -15,3 +15,4 @@ This repository is proprietary and is not licensed for use, distribution, or mod
 ## Helpers
 1. generate yaml files for ansible playbooks by running tf plan in helpers directory
 2. bash script for renaming test docs to random strings is located at `helpers/scripts/doc_naming.sh`
+    - this script is used to generate random strings for the test docs so that their names are unique and do not conflict with each other
