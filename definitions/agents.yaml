@@ -1,0 +1,14 @@
+---
+datastores:
+  - name: test-structured-datastore-01
+    location: us
+    project: product-app-prod-01
+    solution_types:
+      - search
+      # - recommendation
+      # - chat
+      # - gen_chat
+    content_config:
+      type: NO_CONTENT
+      create_advanced_site_search: false
+      skip_default_schema_creation: false

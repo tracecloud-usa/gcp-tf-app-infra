@@ -12,3 +12,13 @@ variable "provider_config" {
 # stored in TFE
 variable "ssh_pub_key" {}
 
+variable "agent_alias_provider_config" {
+  type = object({
+    project = string
+    region  = string
+  })
+  default = {
+    project = "product-app-prod-01"
+    region  = "us-east4"
+  }
+}
