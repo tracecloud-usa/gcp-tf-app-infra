@@ -22,3 +22,19 @@ datastores:
         - file_type: pdf
           parsing_config: layout # or ocr 
           use_native_text: null # leave null unless ocr parser
+  - name: test-public-website-datastore-01
+    location: us
+    project: product-app-prod-01
+    solution_types:
+      - search
+    content_config:
+      type: PUBLIC_WEBSITE
+      create_advanced_site_search: true
+      skip_default_schema_creation: false
+    document_processing:
+      default_parser: layout
+      chunking:
+        enabled: true
+        chunk_size: 300
+        include_headings: true
+      parsing_overrides: []
