@@ -1,11 +1,3 @@
-locals {
-  definitions_path = "${path.module}/definitions"
-  instances_yaml   = file("${local.definitions_path}/vms.yaml")
-  agents_yaml      = file("${local.definitions_path}/agents.yaml")
-  datastores       = { for k, v in yamldecode(local.agents_yaml).datastores : v.name => v }
-  instances        = { for k, v in yamldecode(local.instances_yaml).vms : v.name => v }
-}
-
 module "vms" {
   source = "./modules/vms"
 
@@ -33,6 +25,15 @@ module "ai_agent_builder" {
 }
 
 data "google_storage_bucket" "this" {
-  name    = "ai-test-docs-bucket"
-  project = "product-app-prod-01"
+  name    = var.gcs_bucket.name
+  project = var.gcs_bucket.project
 }
+
+resource "google_storage_bucket_object" "datastore_file" {
+  for_each = { for file in local.datastore_files : file => file }
+
+  name   = each.value
+  bucket = data.google_storage_bucket.this.name
+  source = "${var.datastore_docs_directory}/${each.value}"
+}
+

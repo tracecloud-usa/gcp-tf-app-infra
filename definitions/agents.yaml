@@ -1,30 +1,36 @@
 ---
 datastores:
-  - name: test-structured-datastore-01
+  - name: test-unstructured-datastore-01
     location: us
     project: product-app-prod-01
+    gcs_bucket_name: ai-test-docs-bucket-01
     solution_types:
       - search
       # - recommendation
       # - chat
       # - gen_chat
     content_config:
-      type: NO_CONTENT
+      type: CONTENT_REQUIRED
       create_advanced_site_search: false
       skip_default_schema_creation: false
     document_processing:
-      default_parser: digital # or layout or ocr
+      default_parser: digital
       chunking:
         enabled: true
         chunk_size: 300
         include_headings: true
-      parsing_overrides:
+      parsing_overrides: 
         - file_type: pdf
-          parsing_config: layout # or ocr 
-          use_native_text: null # leave null unless ocr parser
+          parsing_config: layout
+          use_native_text: null
+        - file_type: docx
+          parsing_config: digital
+          use_native_text: null
+
   - name: test-public-website-datastore-01
     location: us
     project: product-app-prod-01
+    gcs_bucket_name: null
     solution_types:
       - search
     content_config:

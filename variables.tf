@@ -3,10 +3,6 @@ variable "provider_config" {
     project = string
     region  = string
   })
-  default = {
-    project = "vpc-edge-prod-01"
-    region  = "us-east4"
-  }
 }
 
 # stored in TFE
@@ -17,8 +13,15 @@ variable "agent_alias_provider_config" {
     project = string
     region  = string
   })
-  default = {
-    project = "product-app-prod-01"
-    region  = "us-east4"
-  }
+}
+
+variable "datastore_docs_directory" {
+  type = string
+}
+
+variable "gcs_bucket" {
+  type = object({
+    name    = string
+    project = string
+  })
 }

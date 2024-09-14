@@ -15,3 +15,5 @@ provider "google-beta" {
 }
 
 provider "random" {}
+
+provider "null" {}

@@ -1,9 +1,10 @@
 variable "datastores" {
   type = map(object({
-    name           = string
-    location       = string
-    project        = string
-    solution_types = list(string)
+    name            = string
+    location        = string
+    project         = string
+    gcs_bucket_name = string
+    solution_types  = list(string)
     content_config = object({
       type                         = string
       create_advanced_site_search  = bool
