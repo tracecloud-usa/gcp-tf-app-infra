@@ -9,6 +9,19 @@ variable "datastores" {
       create_advanced_site_search  = bool
       skip_default_schema_creation = bool
     })
+    document_processing = optional(object({
+      chunking = object({
+        enabled          = bool
+        chunk_size       = number
+        include_headings = bool
+      })
+      default_parser = string
+      parsing_overrides = list(object({
+        file_type       = string
+        parsing_config  = string
+        use_native_text = bool
+      }))
+    }))
   }))
   default = {}
 }
