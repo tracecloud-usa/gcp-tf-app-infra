@@ -1,14 +1,11 @@
 ---
 datastores:
-  - name: test-unstructured-datastore-01
+  - name: unstructured-datastore-01
     location: us
     project: product-app-prod-01
     gcs_bucket_name: ai-test-docs-bucket-01
     solution_types:
-      - search
-      # - recommendation
-      # - chat
-      # - gen_chat
+      - chat
     content_config:
       type: CONTENT_REQUIRED
       create_advanced_site_search: false
@@ -27,12 +24,13 @@ datastores:
           parsing_config: digital
           use_native_text: null
 
-  - name: test-public-website-datastore-01
+  - name: website-datastore-01
     location: us
     project: product-app-prod-01
     gcs_bucket_name: null
     solution_types:
       - search
+      - chat
     content_config:
       type: PUBLIC_WEBSITE
       create_advanced_site_search: true
