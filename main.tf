@@ -21,7 +21,7 @@ module "ai_agent_builder" {
     google = google.ai_agent
   }
 
-  datastores = { for k, v in yamldecode(local.agents_yaml).datastores : v.name => v }
+  datastores = local.datastores
 }
 
 data "google_storage_bucket" "this" {
