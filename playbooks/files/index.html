@@ -15,6 +15,11 @@
             document.getElementById('overlay').classList.remove('show');
             document.getElementById(contentId).classList.remove('show');
         }
+        function closeAllPopups() {
+            document.getElementById('overlay').classList.remove('show');
+            const popups = document.querySelectorAll('.popup');
+            popups.forEach(popup => popup.classList.remove('show'));
+        }
     </script>
 </head>
 <body>
@@ -24,8 +29,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" onclick="openPopup('popupHome')">Home</a></li>
-                <li><a href="#" onclick="openPopup('popupFeatures')">Features</a></li>
+                                <li><a href="#" onclick="openPopup('popupFeatures')">Features</a></li>
                 <li><a href="#" onclick="openPopup('popupPricing')">Pricing</a></li>
                 <li><a href="#" onclick="openPopup('popupContact')">Contact</a></li>
             </ul>
@@ -41,17 +45,9 @@
     </section>
 
     <!-- Popups -->
-    <div id="overlay" class="overlay" onclick="closePopup('popupHome'); closePopup('popupFeatures'); closePopup('popupPricing'); closePopup('popupContact');"></div>
+    <div id="overlay" class="overlay" onclick="closeAllPopups()"></div>
 
-    <div id="popupHome" class="popup">
-        <div class="popup-header">
-            <h2>Home</h2>
-            <button class="popup-close" onclick="closePopup('popupHome')">&times;</button>
-        </div>
-        <p>Welcome to the tracecloud home page! Here you can find all the initial information about our services.</p>
-    </div>
-
-    <div id="popupFeatures" class="popup">
+        <div id="popupFeatures" class="popup">
         <div class="popup-header">
             <h2>Features</h2>
             <button class="popup-close" onclick="closePopup('popupFeatures')">&times;</button>
