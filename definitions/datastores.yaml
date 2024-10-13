@@ -1,6 +1,6 @@
 ---
 datastores:
-  - name: unstructured-datastore-01
+  - name: resume-pile-datastore
     location: us
     project: product-app-prod-01
     gcs_bucket_name: ai-test-docs-bucket-01
@@ -13,9 +13,9 @@ datastores:
     document_processing:
       default_parser: digital
       chunking:
-        enabled: true
-        chunk_size: 300
-        include_headings: true
+        enabled: false
+        chunk_size: null
+        include_headings: null
       parsing_overrides: 
         - file_type: pdf
           parsing_config: layout
@@ -24,7 +24,7 @@ datastores:
           parsing_config: digital
           use_native_text: null
 
-  - name: website-datastore-01
+  - name: website-datastore
     location: us
     project: product-app-prod-01
     gcs_bucket_name: null
@@ -39,6 +39,6 @@ datastores:
       default_parser: layout
       chunking:
         enabled: true
-        chunk_size: 300
+        chunk_size: 500
         include_headings: true
       parsing_overrides: []
