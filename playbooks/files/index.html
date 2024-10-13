@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to tracecloud</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
     <link rel="stylesheet" href="styles.css">
+    <script>
+        function openPopup(contentId) {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById(contentId).classList.add('show');
+        }
+        function closePopup(contentId) {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById(contentId).classList.remove('show');
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -13,10 +24,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" onclick="openPopup('popupHome')">Home</a></li>
+                <li><a href="#" onclick="openPopup('popupFeatures')">Features</a></li>
+                <li><a href="#" onclick="openPopup('popupPricing')">Pricing</a></li>
+                <li><a href="#" onclick="openPopup('popupContact')">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -28,6 +39,41 @@
             <a href="#" class="cta-button">Get Started</a>
         </div>
     </section>
+
+    <!-- Popups -->
+    <div id="overlay" class="overlay" onclick="closePopup('popupHome'); closePopup('popupFeatures'); closePopup('popupPricing'); closePopup('popupContact');"></div>
+
+    <div id="popupHome" class="popup">
+        <div class="popup-header">
+            <h2>Home</h2>
+            <button class="popup-close" onclick="closePopup('popupHome')">&times;</button>
+        </div>
+        <p>Welcome to the tracecloud home page! Here you can find all the initial information about our services.</p>
+    </div>
+
+    <div id="popupFeatures" class="popup">
+        <div class="popup-header">
+            <h2>Features</h2>
+            <button class="popup-close" onclick="closePopup('popupFeatures')">&times;</button>
+        </div>
+        <p>Learn about our advanced features that leverage AI to make your data more insightful.</p>
+    </div>
+
+    <div id="popupPricing" class="popup">
+        <div class="popup-header">
+            <h2>Pricing</h2>
+            <button class="popup-close" onclick="closePopup('popupPricing')">&times;</button>
+        </div>
+        <p>We offer competitive pricing plans for businesses of all sizes. Check them out here.</p>
+    </div>
+
+    <div id="popupContact" class="popup">
+        <div class="popup-header">
+            <h2>Contact</h2>
+            <button class="popup-close" onclick="closePopup('popupContact')">&times;</button>
+        </div>
+        <p>Get in touch with us for more information. We'd love to hear from you!</p>
+    </div>
 
     <footer>
         <p>&copy; 2024 tracecloud.us All rights reserved.</p>

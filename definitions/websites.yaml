@@ -1,0 +1,9 @@
+---
+websites:
+  - host: nginx
+    domain: test.tracecloud.us
+    web_server: web-node-01
+    files:
+      - index.html
+      - styles.css
+      - banner-background.jpg

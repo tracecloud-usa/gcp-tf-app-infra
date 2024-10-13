@@ -7,7 +7,4 @@ website_files:
     - index.html
     - styles.css
     - banner-background.jpg
-    - contact.html
-    - pricing.html
-    - features.html
 host: nginx

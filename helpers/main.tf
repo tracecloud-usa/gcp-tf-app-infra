@@ -1,5 +1,10 @@
+locals {
+  webserver_website_config = yamldecode(file("../definitions/websites.yaml"))
+  websites                 = { for k, v in local.webserver_website_config.websites : k => v }
+}
+
 resource "local_file" "nginx_config" {
-  for_each = { for k, v in var.websites : k => v }
+  for_each = local.websites
 
   filename = "../playbooks/sites/${each.value.domain}.conf"
   content = templatefile("${path.module}/templates/${each.value.host}.conf.tpl", {
@@ -8,7 +13,7 @@ resource "local_file" "nginx_config" {
 }
 
 resource "local_file" "nginx_ansible_vars" {
-  for_each = { for k, v in var.websites : k => v }
+  for_each = local.websites
 
   filename = "../playbooks/host_vars/${each.value.host}.yaml"
   content = templatefile("${path.module}/templates/host_vars.tpl", {
@@ -21,5 +26,5 @@ resource "local_file" "nginx_ansible_vars" {
 
 data "tfe_outputs" "this" {
   organization = "tracecloud"
-  workspace    = "gcp-tf-prod-infra"
+  workspace    = "gcp-tf-app-infra"
 }
