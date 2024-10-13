@@ -24,7 +24,7 @@ terraform {
     organization = "tracecloud"
 
     workspaces {
-      name = "gcp-tf-prod-infra"
+      name = "gcp-tf-app-infra"
     }
   }
 }
