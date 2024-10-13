@@ -7,4 +7,5 @@ website_files:
     - index.html
     - styles.css
     - banner-background.jpg
+    - loginsuccess.html
 host: nginx
