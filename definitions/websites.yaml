@@ -6,7 +6,6 @@ websites:
     files:
       - index.html
       - styles.css
-      - banner-background.jpg
       - loginsuccess.html
       - nebula.jpg
 

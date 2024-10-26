@@ -8,13 +8,6 @@ variable "provider_config" {
 # stored in TFE
 variable "ssh_pub_key" {}
 
-variable "agent_alias_provider_config" {
-  type = object({
-    project = string
-    region  = string
-  })
-}
-
 variable "datastore_docs_directory" {
   type = string
 }

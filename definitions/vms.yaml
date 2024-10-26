@@ -13,9 +13,4 @@ vms:
       - mgmt
       - web
       - health-checks
-    startup_script:
-      template: startup-script.tpl
-      vars:
-        username: trace
-        ssh_pubkey_path: ~/.ssh/id_rsa.pub
     preemptible: true

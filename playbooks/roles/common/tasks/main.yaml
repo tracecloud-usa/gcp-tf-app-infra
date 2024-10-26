@@ -1,6 +1,0 @@
----
-- name: Make sure the default org user is on the machine
-  import_tasks: user_check.yaml
-
-- name: Confirm that ssh configurations are safe
-  import_tasks: ssh_check.yaml
