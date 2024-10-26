@@ -34,13 +34,13 @@ data "google_certificate_manager_certificate_map" "this" {
 }
 
 module "gce-lb-https" {
-  # source            = "github.com/terraform-google-modules/terraform-google-lb-http.git?ref=v12.0.0"
   source  = "terraform-google-modules/lb-http/google"
   version = "11.0.0"
 
   name              = "test-tracecloud-lb-https"
   project           = "product-app-prod-01"
-  create_url_map    = true
+  create_url_map    = false
+  url_map           = google_compute_url_map.this.self_link
   ssl               = true
   certificate_map   = data.google_certificate_manager_certificate_map.this.id
   https_redirect    = true
@@ -76,3 +76,27 @@ module "gce-lb-https" {
     }
   }
 }
+
+resource "google_compute_url_map" "this" {
+  name        = "test-tracecloud-url-map"
+  description = "a description"
+
+  default_service = module.gce-lb-https.backend_services["default"].self_link
+
+  host_rule {
+    hosts        = ["test.tracecloud.us"]
+    path_matcher = "test"
+  }
+
+  path_matcher {
+    name            = "test"
+    default_service = module.gce-lb-https.backend_services["default"].self_link
+  }
+
+  test {
+    service = module.gce-lb-https.backend_services["default"].self_link
+    host    = "test.tracecloud.us"
+    path    = "/index.html"
+  }
+}
+
