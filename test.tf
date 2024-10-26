@@ -5,6 +5,7 @@ module "gce-lb-https" {
   create_url_map    = true
   ssl               = true
   certificate_map   = data.google_certificate_manager_certificate_map.this.id
+  https_redirect    = true
   firewall_networks = []
 
   backends = {

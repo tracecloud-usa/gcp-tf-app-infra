@@ -6,6 +6,159 @@
     <title>Welcome to tracecloud</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #f0f0f0;
+            background-color: #000;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #00d4ff;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin-left: 20px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #f0f0f0;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #00d4ff;
+        }
+        .hero {
+            height: 100vh;
+            background: url('nebula.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero-content {
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+        }
+        .hero-content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+        .hero-content p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            text-decoration: none;
+            padding: 15px 30px;
+            background: #00d4ff;
+            color: #000;
+            font-weight: 700;
+            border-radius: 30px;
+            transition: background 0.3s ease;
+        }
+        .cta-button:hover {
+            background: #00b4e0;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background: rgba(20, 20, 20, 0.95);
+            color: #f0f0f0;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .popup.show {
+            display: block;
+            opacity: 1;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .popup-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .popup-close {
+            background: none;
+            border: none;
+            color: #00d4ff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9;
+        }
+        .overlay.show {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #f0f0f0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            nav ul li {
+                margin: 10px;
+            }
+            .hero-content {
+                padding: 20px;
+            }
+            .cta-button {
+                display: inline-block;
+                margin: 10px;
+            }
+        }
+    </style>
     <script>
         function openPopup(contentId) {
             document.getElementById('overlay').classList.add('show');
@@ -108,55 +261,5 @@
     <footer>
         <p>&copy; 2024 tracecloud.us All rights reserved.</p>
     </footer>
-
-    <style>
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 600px;
-            background: rgba(230, 230, 230, 0.9); /* Lighter gray with slight transparency */
-            color: #121212;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
-            z-index: 10;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .popup.show {
-            display: block;
-            opacity: 1;
-        }
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .popup-header h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .popup-close {
-            background: none;
-            border: none;
-            color: #00d4ff;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .overlay.show {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9;
-        }
-    </style>
 </body>
 </html>

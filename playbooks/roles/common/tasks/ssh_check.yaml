@@ -4,7 +4,7 @@
   register: sshd_config_check
   ignore_errors: yes
 
-- name: Ensure PasswordAuthentication is disabled
+- name: Confirm PasswordAuthentication is disabled
   ansible.builtin.debug:
     msg: "Password-based SSH is disabled on {{ inventory_hostname }}."
   when: sshd_config_check.rc == 0

@@ -8,4 +8,5 @@ website_files:
     - styles.css
     - banner-background.jpg
     - loginsuccess.html
+    - nebula.jpg
 host: nginx
