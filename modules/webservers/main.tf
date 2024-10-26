@@ -61,6 +61,19 @@ resource "google_compute_instance" "this" {
 resource "google_compute_address" "this" {
   for_each = { for k, v in var.network_interfaces : k => v if v.assign_public_ip == true }
 
-  name   = "${var.name}-nat-ip"
-  region = var.region
+  name    = "${var.name}-nat-ip"
+  region  = var.region
+  project = var.project
+}
+
+resource "google_compute_instance_group" "this" {
+  name      = "${var.name}-lb-ig"
+  project   = google_compute_instance.this.project
+  zone      = google_compute_instance.this.zone
+  network   = google_compute_instance.this.network_interface[0].network
+  instances = [google_compute_instance.this.self_link]
+  named_port {
+    name = "http"
+    port = 80
+  }
 }

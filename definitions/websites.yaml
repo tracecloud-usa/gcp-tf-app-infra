@@ -2,9 +2,11 @@
 websites:
   - host: nginx
     domain: test.tracecloud.us
-    web_server: web-node-01
+    web_server: web-node-1
     files:
       - index.html
       - styles.css
       - banner-background.jpg
       - loginsuccess.html
+      - nebula.jpg
+

@@ -1,6 +1,11 @@
 locals {
   webserver_website_config = yamldecode(file("../definitions/websites.yaml"))
   websites                 = { for k, v in local.webserver_website_config.websites : k => v }
+
+  definitions_path = "../definitions"
+
+  instances_yaml = file("${local.definitions_path}/vms.yaml")
+  instances      = { for k, v in yamldecode(local.instances_yaml).vms : v.name => v }
 }
 
 resource "local_file" "nginx_config" {
@@ -23,6 +28,17 @@ resource "local_file" "nginx_ansible_vars" {
     host          = each.value.host
   })
 }
+
+resource "local_file" "startup_script" {
+  for_each = local.instances
+
+  filename = "./scripts/startup-script.sh"
+  content = templatefile("${path.module}/templates/startup-script.tpl", {
+    username        = each.value.startup_script.vars["username"]
+    ssh_pubkey_path = each.value.startup_script.vars["ssh_pubkey_path"]
+  })
+}
+
 
 data "tfe_outputs" "this" {
   organization = "tracecloud"

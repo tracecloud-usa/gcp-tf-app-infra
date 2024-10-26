@@ -1,5 +1,5 @@
-module "vms" {
-  source = "./modules/vms"
+module "webservers" {
+  source = "./modules/webservers"
 
   for_each = local.instances
 
@@ -14,15 +14,15 @@ module "vms" {
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
 
-module "ai_agent_builder" {
-  source = "./modules/agent"
+# module "ai_agent_builder" {
+#   source = "./modules/agent"
 
-  providers = {
-    google = google.ai_agent
-  }
+#   providers = {
+#     google = google.ai_agent
+#   }
 
-  datastores = local.datastores
-}
+#   datastores = local.datastores
+# }
 
 data "google_storage_bucket" "this" {
   name    = var.gcs_bucket.name

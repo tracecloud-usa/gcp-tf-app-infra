@@ -6,7 +6,7 @@ gcs_bucket = {
 }
 
 provider_config = {
-  project = "vpc-edge-prod-01"
+  project = "product-app-prod-01"
   region  = "us-east4"
 }
 
