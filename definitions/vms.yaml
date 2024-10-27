@@ -1,6 +1,8 @@
 vms:
   - name: web-node-1
     project: product-app-prod-01
+    machine_type: e2-small
+    image: ubuntu-os-cloud/ubuntu-2004-lts
     zone: us-east4-c
     region: us-east4
     service_account: nginx-web-admin

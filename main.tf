@@ -1,3 +1,10 @@
+locals {
+  definitions_path = "${path.module}/definitions"
+  instances_yaml   = file("${local.definitions_path}/vms.yaml")
+
+  instances = { for k, v in yamldecode(local.instances_yaml).vms : v.name => v }
+}
+
 module "webservers" {
   source = "./modules/webservers"
 
@@ -11,22 +18,11 @@ module "webservers" {
   network_interfaces = each.value.nics
   tags               = each.value.tags
   preemptible        = each.value.preemptible
+  machine_type       = each.value.machine_type
+  image              = each.value.image
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
 
-
-data "google_storage_bucket" "this" {
-  name    = var.gcs_bucket.name
-  project = var.gcs_bucket.project
-}
-
-resource "google_storage_bucket_object" "datastore_file" {
-  for_each = { for file in local.datastore_files : file => file }
-
-  name   = each.value
-  bucket = data.google_storage_bucket.this.name
-  source = "${var.datastore_docs_directory}/${each.value}"
-}
 
 data "google_certificate_manager_certificate_map" "this" {
   name    = "tracecloud-us-cert-map"

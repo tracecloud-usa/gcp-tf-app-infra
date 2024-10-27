@@ -39,3 +39,13 @@ variable "preemptible" {
   type    = bool
   default = false
 }
+
+variable "machine_type" {
+  type    = string
+  default = "n2-standard-2"
+}
+
+variable "image" {
+  type    = string
+  default = "ubuntu-os-cloud/ubuntu-2004-lts"
+}

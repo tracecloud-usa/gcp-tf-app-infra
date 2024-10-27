@@ -2,14 +2,14 @@ resource "google_compute_instance" "this" {
   name    = var.name
   project = var.project
 
-  machine_type = "n2-standard-2"
+  machine_type = var.machine_type
   zone         = var.zone
 
   tags = var.tags
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      image = var.image
     }
   }
 
