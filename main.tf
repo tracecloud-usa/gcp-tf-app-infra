@@ -3,7 +3,25 @@ locals {
   instances_yaml   = file("${local.definitions_path}/vms.yaml")
 
   instances = { for k, v in yamldecode(local.instances_yaml).vms : v.name => v }
+
+  website_files_dir = "./website_files"
+
+  website_files = fileset(local.website_files_dir, "*")
 }
+
+data "google_storage_bucket" "this" {
+  name    = "tracecloud-website-files-01"
+  project = "product-app-prod-01"
+}
+
+resource "google_storage_bucket_object" "this" {
+  for_each = { for file in local.website_files : file => file }
+
+  name   = each.value
+  bucket = data.google_storage_bucket.this.name
+  source = "${local.website_files_dir}/${each.value}"
+}
+
 
 module "webservers" {
   source = "./modules/webservers"
@@ -30,9 +48,8 @@ data "google_certificate_manager_certificate_map" "this" {
 }
 
 module "gce-lb-https" {
-  source  = "terraform-google-modules/lb-http/google"
-  version = "11.0.0"
-
+  source            = "GoogleCloudPlatform/lb-http/google"
+  version           = "12.0.0"
   name              = "test-tracecloud-lb-https"
   project           = "product-app-prod-01"
   create_url_map    = false
@@ -95,4 +112,3 @@ resource "google_compute_url_map" "this" {
     path    = "/index.html"
   }
 }
-

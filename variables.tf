@@ -7,10 +7,3 @@ variable "provider_config" {
 
 # stored in TFE
 variable "ssh_pub_key" {}
-
-variable "gcs_bucket" {
-  type = object({
-    name    = string
-    project = string
-  })
-}
