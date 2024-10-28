@@ -42,73 +42,59 @@ module "webservers" {
 }
 
 
-data "google_certificate_manager_certificate_map" "this" {
-  name    = "tracecloud-us-cert-map"
-  project = "product-app-prod-01"
+locals {
+  load_balancers_yaml = file("${local.definitions_path}/lbs.yaml")
+  load_balancers      = { for k, v in yamldecode(local.load_balancers_yaml).lbs : v.name_prefix => v }
 }
 
-module "gce-lb-https" {
-  source            = "GoogleCloudPlatform/lb-http/google"
-  version           = "12.0.0"
-  name              = "test-tracecloud-lb-https"
-  project           = "product-app-prod-01"
-  create_url_map    = false
-  url_map           = google_compute_url_map.this.self_link
-  ssl               = true
-  certificate_map   = data.google_certificate_manager_certificate_map.this.id
-  https_redirect    = true
-  firewall_networks = []
+module "application_load_balancer" {
+  source = "./modules/load_balancer"
 
-  backends = {
-    default = {
-      protocol    = "HTTP"
-      port        = 80
-      port_name   = "http"
-      timeout_sec = 10
-      enable_cdn  = false
+  for_each = local.load_balancers
 
-      health_check = {
-        request_path = "/"
-        port         = 80
+  ssl_certificate_map = {
+    name    = each.value.ssl_cert_map.name
+    project = each.value.ssl_cert_map.project
+  }
+  url_map = {
+    hosts = distinct([for rule in each.value.url_map : rule.host])
+    paths = [
+      for rule in each.value.url_map : {
+        host    = rule.host
+        path    = rule.path
+        backend = rule.backend
       }
-
-      log_config = {
-        enable      = true
-        sample_rate = 1.0
-      }
-
-      groups = [
-        {
-          group = module.webservers["web-node-1"].instance_group.self_link
+    ]
+  }
+  https_lb = {
+    name_prefix = each.value.name_prefix
+    project     = each.value.project
+    backends = [
+      for backend in each.value.backends : {
+        name        = backend.name
+        type        = backend.type
+        protocol    = backend.protocol
+        port        = backend.port
+        port_name   = backend.port_name
+        timeout_sec = backend.timeout_sec
+        enable_cdn  = backend.enable_cdn
+        health_check = {
+          request_path = backend.health_check.request_path
+          port         = backend.health_check.port
         }
-      ]
-
-      iap_config = {
-        enable = false
+        log_config = {
+          enable      = backend.log_config.enable
+          sample_rate = backend.log_config.sample_rate
+        }
+        groups = [
+          for group in backend.groups : {
+            ig = module.webservers[group.ig].instance_group["self_link"]
+          }
+        ]
+        iap_config = {
+          enable = backend.iap_config.enable
+        }
       }
-    }
-  }
-}
-
-resource "google_compute_url_map" "this" {
-  name        = "test-tracecloud-url-map"
-  description = "a description"
-
-  default_service = module.gce-lb-https.backend_services["default"].self_link
-
-  host_rule {
-    hosts        = ["test.tracecloud.us"]
-    path_matcher = "test"
-  }
-
-  path_matcher {
-    name            = "test"
-    default_service = module.gce-lb-https.backend_services["default"].self_link
-  }
-
-  test {
-    service = module.gce-lb-https.backend_services["default"].self_link
-    host    = "test.tracecloud.us"
-    path    = "/index.html"
+    ]
   }
 }
