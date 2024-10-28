@@ -76,24 +76,18 @@ module "application_load_balancer" {
         protocol    = backend.protocol
         port        = backend.port
         port_name   = backend.port_name
-        timeout_sec = backend.timeout_sec
-        enable_cdn  = backend.enable_cdn
-        health_check = {
-          request_path = backend.health_check.request_path
-          port         = backend.health_check.port
-        }
-        log_config = {
-          enable      = backend.log_config.enable
-          sample_rate = backend.log_config.sample_rate
-        }
+        timeout_sec = try(backend.timeout_sec, null)
+        enable_cdn  = try(backend.enable_cdn, null)
+
+        health_check = try(backend.health_check, null)
+
+        log_config = try(backend.log_config, null)
         groups = [
           for group in backend.groups : {
             ig = module.webservers[group.ig].instance_group["self_link"]
           }
         ]
-        iap_config = {
-          enable = backend.iap_config.enable
-        }
+        iap_config = try(backend.iap_config, null)
       }
     ]
   }

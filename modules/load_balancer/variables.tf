@@ -16,22 +16,22 @@ variable "https_lb" {
       protocol    = string
       port        = number
       port_name   = string
-      timeout_sec = number
-      enable_cdn  = bool
-      health_check = object({
+      timeout_sec = optional(number)
+      enable_cdn  = optional(bool)
+      health_check = optional(object({
         request_path = string
         port         = number
-      })
-      log_config = object({
+      }))
+      log_config = optional(object({
         enable      = bool
         sample_rate = number
-      })
+      }))
       groups = list(object({
         ig = string
       }))
-      iap_config = object({
+      iap_config = optional(object({
         enable = bool
-      })
+      }))
     }))
   })
 }

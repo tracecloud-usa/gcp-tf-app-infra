@@ -23,30 +23,37 @@ module "gce-lb-https" {
   https_redirect    = true
   firewall_networks = []
 
-  backends = { for backends in var.https_lb["backends"] : backends.name => {
-    protocol    = backends.protocol
-    port        = backends.port
-    port_name   = backends.port_name
-    timeout_sec = backends.timeout_sec
-    enable_cdn  = backends.enable_cdn
+  backends = {
+    for backends in var.https_lb["backends"] : backends.name => {
+      protocol    = backends.protocol
+      port        = backends.port
+      port_name   = backends.port_name
+      timeout_sec = coalesce(backends.timeout_sec, 10)
+      enable_cdn  = coalesce(backends.enable_cdn, false)
 
-    health_check = {
-      request_path = backends.health_check.request_path
-      port         = backends.health_check.port
-    }
+      health_check = backends.health_check != null ? {
+        request_path = backends.health_check.request_path
+        port         = backends.health_check.port
+        } : {
+        request_path = "/"
+        port         = backends.port
+      }
 
-    log_config = {
-      enable      = backends.log_config.enable
-      sample_rate = backends.log_config.sample_rate
-    }
+      log_config = backends.log_config != null ? {
+        enable      = backends.log_config.enable
+        sample_rate = backends.log_config.sample_rate
+        } : {
+        enable      = true
+        sample_rate = 1
+      }
 
-    groups = [for group in backends.groups : {
-      group = group.ig
-    }]
+      groups = [for group in backends.groups : {
+        group = group.ig
+      }]
 
-    iap_config = {
-      enable = backends.iap_config.enable
-    }
+      iap_config = backends.iap_config != null ? backends.iap_config : {
+        enable = false
+      }
     }
   }
 }
@@ -62,7 +69,7 @@ resource "google_compute_url_map" "this" {
 
     content {
       hosts        = [host_rule.value]
-      path_matcher = host_rule.value
+      path_matcher = replace(host_rule.value, ".", "-")
     }
   }
 
@@ -70,11 +77,11 @@ resource "google_compute_url_map" "this" {
     for_each = toset(var.url_map["hosts"])
 
     content {
-      name            = path_matcher.value
+      name            = replace(path_matcher.value, ".", "-")
       default_service = module.gce-lb-https.backend_services["default"].self_link
 
       dynamic "path_rule" {
-        for_each = [for rule in var.url_map["paths"] : rule if rule.host == path_matcher.value]
+        for_each = [for rule in var.url_map["paths"] : rule if replace(rule.host, ".", "-") == path_matcher.value]
 
         content {
           paths   = [path_rule.value.path]
