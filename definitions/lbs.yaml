@@ -11,7 +11,7 @@ lbs:
         path: /*
         backend: default
       - host: test.tracecloud.us
-        path: /images
+        path: /images/*
         backend: images     
     backends:
       - name: default
