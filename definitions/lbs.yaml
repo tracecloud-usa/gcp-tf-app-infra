@@ -8,11 +8,11 @@ lbs:
       project: product-app-prod-01
     url_map:
       - host: test.tracecloud.us
-        path: /
+        path: /*
         backend: default
-      # - host: test.tracecloud.us
-      #   path: /images
-      #   backend: images     
+      - host: test.tracecloud.us
+        path: /images
+        backend: images     
     backends:
       - name: default
         type: instance_group
@@ -30,3 +30,7 @@ lbs:
           - ig: web-node-1
         iap_config:
           enable: false
+      - name: images
+        type: storage_bucket
+        bucket: tracecloud-website-files-01
+        enable_cdn: false

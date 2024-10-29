@@ -1,9 +1,11 @@
-# resource "google_compute_backend_bucket" "image_backend" {
-#   name        = "image-backend-bucket"
-#   description = "images used for links"
-#   bucket_name = data.google_storage_bucket.this.name
-#   enable_cdn  = false
-# }
+resource "google_compute_backend_bucket" "this" {
+  for_each = { for bucket in var.backend_buckets : bucket.name => bucket }
+
+  name        = "${var.https_lb["name_prefix"]}-backend-${each.value["name"]}"
+  description = coalesce(each.value["description"], "bucket for ${each.value["name"]} backend on ${var.https_lb["name_prefix"]} https load balancer")
+  bucket_name = each.value["bucket_name"]
+  enable_cdn  = each.value["enable_cdn"]
+}
 
 data "google_certificate_manager_certificate_map" "this" {
   name    = var.ssl_certificate_map["name"]
@@ -23,7 +25,7 @@ module "gce-lb-https" {
   https_redirect    = true
   firewall_networks = []
 
-  backends = {
+  backends = { # instance group backends
     for backends in var.https_lb["backends"] : backends.name => {
       protocol    = backends.protocol
       port        = backends.port
@@ -81,13 +83,12 @@ resource "google_compute_url_map" "this" {
       default_service = module.gce-lb-https.backend_services["default"].self_link
 
       dynamic "path_rule" {
-        for_each = [for rule in var.url_map["paths"] : rule if replace(rule.host, ".", "-") == path_matcher.value]
+        for_each = [for rule in var.url_map["paths"] : rule if rule.host == path_matcher.value]
 
         content {
           paths   = [path_rule.value.path]
-          service = path_rule.value.backend
+          service = try(google_compute_backend_bucket.this[path_rule.value.backend].self_link, module.gce-lb-https.backend_services[path_rule.value.backend].self_link)
         }
-
       }
     }
   }

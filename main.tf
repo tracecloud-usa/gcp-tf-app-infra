@@ -1,27 +1,33 @@
 locals {
-  definitions_path = "${path.module}/definitions"
-  instances_yaml   = file("${local.definitions_path}/vms.yaml")
+  definitions_path    = "${path.module}/definitions"
+  instances_yaml      = file("${local.definitions_path}/vms.yaml")
+  load_balancers_yaml = file("${local.definitions_path}/lbs.yaml")
+  website_files_yaml  = file("${local.definitions_path}/files.yaml")
+  website_files_dir   = "./website_files"
 
-  instances = { for k, v in yamldecode(local.instances_yaml).vms : v.name => v }
+  # Decoded YAML definitions
+  instances      = { for v in yamldecode(local.instances_yaml).vms : v.name => v }
+  load_balancers = { for v in yamldecode(local.load_balancers_yaml).lbs : v.name_prefix => v }
 
-  website_files_dir = "./website_files"
-
-  website_files = fileset(local.website_files_dir, "*")
+  # File list for website files
+  website_files = { for file in yamldecode(local.website_files_yaml).files : file.name => file }
 }
 
-data "google_storage_bucket" "this" {
-  name    = "tracecloud-website-files-01"
-  project = "product-app-prod-01"
+data "google_storage_bucket" "website_bucket" {
+  for_each = local.website_files
+
+  name    = each.value["bucket_name"]
+  project = each.value["bucket_project"]
 }
 
-resource "google_storage_bucket_object" "this" {
-  for_each = { for file in local.website_files : file => file }
+resource "google_storage_bucket_object" "website_files" {
+  for_each = local.website_files
 
-  name   = each.value
-  bucket = data.google_storage_bucket.this.name
-  source = "${local.website_files_dir}/${each.value}"
+  name    = each.value["name"]
+  bucket  = data.google_storage_bucket.website_bucket[each.key].name
+  source  = !each.value["empty"] ? "${local.website_files_dir}/${each.value["name"]}" : null
+  content = each.value["empty"] ? " " : null
 }
-
 
 module "webservers" {
   source = "./modules/webservers"
@@ -41,12 +47,6 @@ module "webservers" {
   ssh_key            = "ubuntu:${var.ssh_pub_key}"
 }
 
-
-locals {
-  load_balancers_yaml = file("${local.definitions_path}/lbs.yaml")
-  load_balancers      = { for k, v in yamldecode(local.load_balancers_yaml).lbs : v.name_prefix => v }
-}
-
 module "application_load_balancer" {
   source = "./modules/load_balancer"
 
@@ -56,6 +56,7 @@ module "application_load_balancer" {
     name    = each.value.ssl_cert_map.name
     project = each.value.ssl_cert_map.project
   }
+
   url_map = {
     hosts = distinct([for rule in each.value.url_map : rule.host])
     paths = [
@@ -66,29 +67,36 @@ module "application_load_balancer" {
       }
     ]
   }
+
+  backend_buckets = [for backend in each.value.backends : {
+    name        = backend.name
+    bucket_name = backend.bucket
+    enable_cdn  = backend.enable_cdn
+    description = try(backend.description, null)
+  } if backend.type == "storage_bucket"]
+
   https_lb = {
     name_prefix = each.value.name_prefix
     project     = each.value.project
     backends = [
       for backend in each.value.backends : {
-        name        = backend.name
-        type        = backend.type
-        protocol    = backend.protocol
-        port        = backend.port
-        port_name   = backend.port_name
-        timeout_sec = try(backend.timeout_sec, null)
-        enable_cdn  = try(backend.enable_cdn, null)
-
+        name         = backend.name
+        protocol     = backend.protocol
+        port         = backend.port
+        port_name    = backend.port_name
+        timeout_sec  = try(backend.timeout_sec, null)
+        enable_cdn   = try(backend.enable_cdn, null)
         health_check = try(backend.health_check, null)
+        log_config   = try(backend.log_config, null)
 
-        log_config = try(backend.log_config, null)
         groups = [
           for group in backend.groups : {
             ig = module.webservers[group.ig].instance_group["self_link"]
           }
         ]
+
         iap_config = try(backend.iap_config, null)
-      }
+      } if backend.type == "instance_group"
     ]
   }
 }

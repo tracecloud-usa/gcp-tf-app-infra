@@ -1,0 +1,17 @@
+---
+files:
+  - name: images/
+    empty: true
+    description: folder to contain website images
+    bucket_name: tracecloud-website-files-01
+    bucket_project: product-app-prod-01    
+  - name: images/small.png
+    empty: false
+    description: A small PNG file used for mobile url preview image
+    bucket_name: tracecloud-website-files-01
+    bucket_project: product-app-prod-01
+  - name: images/logo.jpg
+    empty: false
+    description: A logo image used for the website
+    bucket_name: tracecloud-website-files-01
+    bucket_project: product-app-prod-01

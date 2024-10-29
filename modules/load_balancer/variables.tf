@@ -12,7 +12,6 @@ variable "https_lb" {
     project     = string
     backends = list(object({
       name        = string
-      type        = string
       protocol    = string
       port        = number
       port_name   = string
@@ -47,5 +46,16 @@ variable "url_map" {
       backend = string
     }))
   })
+
+}
+
+variable "backend_buckets" {
+  description = "The backend buckets to use for the load balancer"
+  type = list(object({
+    name        = string
+    description = string
+    bucket_name = string
+    enable_cdn  = bool
+  }))
 
 }
